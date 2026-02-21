@@ -28,6 +28,7 @@ class SignUpViewController: UIViewController {
         
         return button
     }()
+    weak var delegate: AuthNavigatingDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +38,7 @@ class SignUpViewController: UIViewController {
         setupConstraints()
         
         signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
     }
     
     @objc private func signUpButtonTapped() {
@@ -45,11 +47,18 @@ class SignUpViewController: UIViewController {
         AuthService.shared.register(email: emailTextField.text, password: passwordTextField.text, confirmPassword: confirmPasswordTextField.text) { (result) in
             switch result {
             case .success(let user):
-                self.showAlert(with: "Success", end: "You have been registered")
-                print(user.email!)
+                self.showAlert(with: "Success", end: "You have been registered") {
+                    self.present(SetupProfileViewController(), animated: true)
+                }
             case .failure(let error):
                 self.showAlert(with: "Error", end: error.localizedDescription)
             }
+        }
+    }
+    
+    @objc private func loginButtonTapped() {
+        dismiss(animated: true) {
+            self.delegate?.toLoginVC()
         }
     }
 }
@@ -98,7 +107,7 @@ extension SignUpViewController {
         ])
         
         NSLayoutConstraint.activate([
-            bottomStackView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 60),
+            bottomStackView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
             bottomStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             bottomStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
@@ -129,11 +138,14 @@ struct SignUpVCProvider: PreviewProvider {
 
 extension UIViewController {
     
-    func showAlert(with title: String, end message: String) {
+    func showAlert(with title: String, end message: String, completion: @escaping () -> Void = { }) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        let ok = UIAlertAction(title: "OK", style: .default) {
+            (_) in
+            completion()
+        }
         
-        alertController.addAction(okAction)
+        alertController.addAction(ok)
         
         present(alertController, animated: true)
     }
