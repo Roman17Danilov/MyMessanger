@@ -12,6 +12,8 @@
 		30BE9BAA2F48FBBB00CB484E /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9BA92F48FBBB00CB484E /* FirebaseAnalytics */; };
 		30BE9BAC2F48FBBC00CB484E /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9BAB2F48FBBB00CB484E /* FirebaseAnalyticsCore */; };
 		30BE9BAE2F48FBBC00CB484E /* FirebaseAnalyticsIdentitySupport in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9BAD2F48FBBC00CB484E /* FirebaseAnalyticsIdentitySupport */; };
+		30BE9C692F499BA100CB484E /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9C682F499BA100CB484E /* FirebaseAuth */; };
+		30BE9C6B2F499BB600CB484E /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9C6A2F499BB600CB484E /* FirebaseCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,8 +47,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				30BE9BA82F48FBBB00CB484E /* FirebaseAILogic in Frameworks */,
+				30BE9C692F499BA100CB484E /* FirebaseAuth in Frameworks */,
 				30BE9BAE2F48FBBC00CB484E /* FirebaseAnalyticsIdentitySupport in Frameworks */,
 				30BE9BA62F48FBBB00CB484E /* FirebaseAI in Frameworks */,
+				30BE9C6B2F499BB600CB484E /* FirebaseCore in Frameworks */,
 				30BE9BAA2F48FBBB00CB484E /* FirebaseAnalytics in Frameworks */,
 				30BE9BAC2F48FBBC00CB484E /* FirebaseAnalyticsCore in Frameworks */,
 			);
@@ -59,6 +63,7 @@
 			isa = PBXGroup;
 			children = (
 				30BE9B292F48EAA200CB484E /* MyMessanger */,
+				30BE9C672F499BA100CB484E /* Frameworks */,
 				30BE9B282F48EAA200CB484E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -69,6 +74,13 @@
 				30BE9B272F48EAA200CB484E /* MyMessanger.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		30BE9C672F499BA100CB484E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -96,6 +108,8 @@
 				30BE9BA92F48FBBB00CB484E /* FirebaseAnalytics */,
 				30BE9BAB2F48FBBB00CB484E /* FirebaseAnalyticsCore */,
 				30BE9BAD2F48FBBC00CB484E /* FirebaseAnalyticsIdentitySupport */,
+				30BE9C682F499BA100CB484E /* FirebaseAuth */,
+				30BE9C6A2F499BB600CB484E /* FirebaseCore */,
 			);
 			productName = MyMessanger;
 			productReference = 30BE9B272F48EAA200CB484E /* MyMessanger.app */;
@@ -177,6 +191,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = ramazi.MyMessanger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -207,6 +225,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = ramazi.MyMessanger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -397,6 +419,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 30BE9BA42F48FBBB00CB484E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsIdentitySupport;
+		};
+		30BE9C682F499BA100CB484E /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30BE9BA42F48FBBB00CB484E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		30BE9C6A2F499BB600CB484E /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30BE9BA42F48FBBB00CB484E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

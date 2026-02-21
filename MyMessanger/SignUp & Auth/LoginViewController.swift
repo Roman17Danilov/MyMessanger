@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
@@ -36,6 +37,22 @@ class LoginViewController: UIViewController {
         
         googleButton.customizeGoogleButton()
         setupConstraints()
+        
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func loginButtonTapped() {
+        print(#function)
+        
+        AuthService.shared.login(email: emailTextField.text!, password: passwordTextField.text!) { (result) in
+            switch result {
+            case .success(let user):
+                self.showAlert(with: "Success", end: "You have been authorised")
+                print(user.email!)
+            case .failure(let error):
+                self.showAlert(with: "Error", end: error.localizedDescription)
+            }
+        }
     }
 }
 

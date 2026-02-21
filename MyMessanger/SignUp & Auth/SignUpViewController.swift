@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SignUpViewController: UIViewController {
     
@@ -34,6 +35,22 @@ class SignUpViewController: UIViewController {
         view.backgroundColor = .white
         
         setupConstraints()
+        
+        signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func signUpButtonTapped() {
+        print(#function)
+        
+        AuthService.shared.register(email: emailTextField.text, password: passwordTextField.text, confirmPassword: confirmPasswordTextField.text) { (result) in
+            switch result {
+            case .success(let user):
+                self.showAlert(with: "Success", end: "You have been registered")
+                print(user.email!)
+            case .failure(let error):
+                self.showAlert(with: "Error", end: error.localizedDescription)
+            }
+        }
     }
 }
 
@@ -107,6 +124,18 @@ struct SignUpVCProvider: PreviewProvider {
         func updateUIViewController(_ uiViewController: SignUpVCProvider.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<SignUpVCProvider.ContainerView>) {
             
         }
+    }
+}
+
+extension UIViewController {
+    
+    func showAlert(with title: String, end message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        
+        alertController.addAction(okAction)
+        
+        present(alertController, animated: true)
     }
 }
 
