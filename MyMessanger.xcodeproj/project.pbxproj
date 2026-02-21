@@ -6,6 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		30BE9BA62F48FBBB00CB484E /* FirebaseAI in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9BA52F48FBBB00CB484E /* FirebaseAI */; };
+		30BE9BA82F48FBBB00CB484E /* FirebaseAILogic in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9BA72F48FBBB00CB484E /* FirebaseAILogic */; };
+		30BE9BAA2F48FBBB00CB484E /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9BA92F48FBBB00CB484E /* FirebaseAnalytics */; };
+		30BE9BAC2F48FBBC00CB484E /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9BAB2F48FBBB00CB484E /* FirebaseAnalyticsCore */; };
+		30BE9BAE2F48FBBC00CB484E /* FirebaseAnalyticsIdentitySupport in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9BAD2F48FBBC00CB484E /* FirebaseAnalyticsIdentitySupport */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		30BE9B272F48EAA200CB484E /* MyMessanger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMessanger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +44,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30BE9BA82F48FBBB00CB484E /* FirebaseAILogic in Frameworks */,
+				30BE9BAE2F48FBBC00CB484E /* FirebaseAnalyticsIdentitySupport in Frameworks */,
+				30BE9BA62F48FBBB00CB484E /* FirebaseAI in Frameworks */,
+				30BE9BAA2F48FBBB00CB484E /* FirebaseAnalytics in Frameworks */,
+				30BE9BAC2F48FBBC00CB484E /* FirebaseAnalyticsCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +91,11 @@
 			);
 			name = MyMessanger;
 			packageProductDependencies = (
+				30BE9BA52F48FBBB00CB484E /* FirebaseAI */,
+				30BE9BA72F48FBBB00CB484E /* FirebaseAILogic */,
+				30BE9BA92F48FBBB00CB484E /* FirebaseAnalytics */,
+				30BE9BAB2F48FBBB00CB484E /* FirebaseAnalyticsCore */,
+				30BE9BAD2F48FBBC00CB484E /* FirebaseAnalyticsIdentitySupport */,
 			);
 			productName = MyMessanger;
 			productReference = 30BE9B272F48EAA200CB484E /* MyMessanger.app */;
@@ -107,6 +125,9 @@
 			);
 			mainGroup = 30BE9B1E2F48EAA200CB484E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				30BE9BA42F48FBBB00CB484E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 30BE9B282F48EAA200CB484E /* Products */;
 			projectDirPath = "";
@@ -149,7 +170,6 @@
 				INFOPLIST_FILE = MyMessanger/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -160,8 +180,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ramazi.MyMessanger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_APPROACHABLE_CONCURRENCY = NO;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -180,7 +200,6 @@
 				INFOPLIST_FILE = MyMessanger/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -191,8 +210,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ramazi.MyMessanger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_APPROACHABLE_CONCURRENCY = NO;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -341,6 +360,45 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		30BE9BA42F48FBBB00CB484E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		30BE9BA52F48FBBB00CB484E /* FirebaseAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30BE9BA42F48FBBB00CB484E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAI;
+		};
+		30BE9BA72F48FBBB00CB484E /* FirebaseAILogic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30BE9BA42F48FBBB00CB484E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAILogic;
+		};
+		30BE9BA92F48FBBB00CB484E /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30BE9BA42F48FBBB00CB484E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		30BE9BAB2F48FBBB00CB484E /* FirebaseAnalyticsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30BE9BA42F48FBBB00CB484E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsCore;
+		};
+		30BE9BAD2F48FBBC00CB484E /* FirebaseAnalyticsIdentitySupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30BE9BA42F48FBBB00CB484E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsIdentitySupport;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 30BE9B1F2F48EAA200CB484E /* Project object */;
 }
