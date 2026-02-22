@@ -8,7 +8,7 @@
 import Foundation
 
 enum AuthError {
-    case notFilled, invalidEmail, passwordNotMatched, unknownError, serverError
+    case notFilled, invalidEmail, passwordNotMatched, unknownError, serverError, googleAuthFailed
 }
 
 extension AuthError: LocalizedError {
@@ -24,6 +24,8 @@ extension AuthError: LocalizedError {
             return NSLocalizedString("Unknown error", comment: "")
         case .serverError:
             return NSLocalizedString("Server error", comment: "")
+        case .googleAuthFailed:
+            return NSLocalizedString("Problems with google account", comment: "")
         }
     }
 }

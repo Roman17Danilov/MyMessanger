@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import GoogleSignIn
 
 class AuthViewController: UIViewController {
     
@@ -30,10 +31,54 @@ class AuthViewController: UIViewController {
         
         emailButton.addTarget(self, action: #selector(emailButtonTapped), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        googleButton.addTarget(self, action: #selector(googleButtonTapped), for: .touchUpInside)
         
         signUpVC.delegate = self
         loginVC.delegate = self
     }
+    
+    @objc private func googleButtonTapped() {
+        guard let clientID = FirebaseApp.app()?.options.clientID else {
+            return
+        }
+        
+        let config = GIDConfiguration(clientID: clientID)
+        
+        GIDSignIn.sharedInstance.configuration = config
+        
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [weak self] result, error in
+            AuthService.shared.googleLogin(user: result?.user, error: error) { result in
+                switch result {
+                case .success(let firebaseUser):
+                    self?.handleSuccessfulAuth(firebaseUser: firebaseUser)
+                case .failure(let error):
+                    self?.showAlert(with: "Error", end: error.localizedDescription)
+                }
+            }
+        }
+    }
+
+    private func handleSuccessfulAuth(firebaseUser: User) {
+        FirestoreService.shared.getUserData(user: firebaseUser) { [weak self] result in
+            guard let self else { return }
+            
+            switch result {
+            case .success(let mUser):
+                self.showAlert(with: "Successful", end: "You have been registered") {
+                    let mainTabBar = MainTabBarController(currentUser: mUser)
+                    
+                    mainTabBar.modalPresentationStyle = .fullScreen
+                    self.present(mainTabBar, animated: true)
+                }
+            case .failure:
+                self.showAlert(with: "Successful", end: "You have been registered") {
+                    self.present(SetupProfileViewController(currentUser: firebaseUser), animated: true)
+                }
+            }
+        }
+    }
+
+
     
     @objc private func emailButtonTapped() {
         print(#function)
@@ -88,6 +133,8 @@ extension AuthViewController: AuthNavigatingDelegate {
 }
 // MARK: - SwiftUI
 import SwiftUI
+import FirebaseCore
+import FirebaseAuth
 
 struct AuthVCProvider: PreviewProvider {
     static var previews: some View {
