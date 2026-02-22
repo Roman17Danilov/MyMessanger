@@ -53,7 +53,10 @@ class LoginViewController: UIViewController {
                     FirestoreService.shared.getUserData(user: user) { (result) in
                         switch result {
                         case .success(let mUser):
-                            self.present(MainTabBarController(), animated: true)
+                            let mainTabBar = MainTabBarController(currentUser: mUser)
+                            mainTabBar.modalPresentationStyle = .fullScreen
+                            
+                            self.present(mainTabBar, animated: true, completion: nil)
                         case .failure(let error):
                             self.present(SetupProfileViewController(currentUser: user), animated: true)
                         }

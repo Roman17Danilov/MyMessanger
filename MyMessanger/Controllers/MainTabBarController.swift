@@ -9,11 +9,23 @@ import UIKit
 
 class MainTabBarController: UITabBarController {
     
+    private let currentUser: MUser
+    
+    init(currentUser: MUser = MUser(username: "fdfd", email: "fdfd", avatarStringURL: "fdfd", description: "fsdfs", sex: "dfsdfs", id: "fsdfs")) {
+        self.currentUser = currentUser
+        
+        super .init(nibName: nil, bundle: nil )
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let listViewController = ListViewController()
-        let peopleViewController = PeopleViewController()
+        let listViewController = ListViewController(currentUser: currentUser)
+        let peopleViewController = PeopleViewController(currentUser: currentUser)
         
         tabBar.tintColor = #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)
         
