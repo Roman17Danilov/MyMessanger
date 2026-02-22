@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SetupProfileViewController: UIViewController {
     
@@ -18,6 +19,16 @@ class SetupProfileViewController: UIViewController {
     let aboutMeTextField = OneLineTextField(font: .avenir20())
     let sexSegmentedControl = UISegmentedControl(first: "Male", second: "Female")
     let goToChatsButton = UIButton(title: "Go to chats!", titleColor: .white, backgroundColor: .buttonDark(), cornerRadius: 4)
+    private let currentUser: User
+    
+    init(currentUser: User) {
+        self.currentUser = currentUser
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +36,19 @@ class SetupProfileViewController: UIViewController {
         view.backgroundColor = .white
         
         setupConstraints()
+        goToChatsButton.addTarget(self, action: #selector(goToChatsButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func goToChatsButtonTapped() {
+        
+        FirestoreService.shared.saveProfileWith(id: currentUser.uid, email: currentUser.email!, username: fullNameTextField.text, avatarImageString: nil, description: aboutMeTextField.text, sex: sexSegmentedControl.titleForSegment(at: sexSegmentedControl.selectedSegmentIndex)) { (result) in
+            switch result {
+            case .success(let mUser):
+                self.showAlert(with: "Successful!", end: "Have a nice chatting")
+            case .failure(let error):
+                self.showAlert(with: "Error", end: error.localizedDescription)
+            }
+        }
     }
 }
 
@@ -85,7 +109,7 @@ struct SetupProfileVCProvider: PreviewProvider {
     
     struct ContainerView: UIViewControllerRepresentable {
         
-        let setupProfileVC = SetupProfileViewController()
+        let setupProfileVC = SetupProfileViewController(currentUser: Auth.auth().currentUser!)
         
         func makeUIViewController(context: UIViewControllerRepresentableContext<SetupProfileVCProvider.ContainerView>) -> SetupProfileViewController {
             return setupProfileVC
