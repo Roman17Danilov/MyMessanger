@@ -21,6 +21,16 @@ class SetupProfileViewController: UIViewController {
     let goToChatsButton = UIButton(title: "Go to chats!", titleColor: .white, backgroundColor: .buttonDark(), cornerRadius: 4)
     private let currentUser: User
     
+    private var selectedImage: UIImage?
+    
+    private func presentImagePicker() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        picker.sourceType = .photoLibrary
+        present(picker, animated: true)
+    }
+    
     init(currentUser: User) {
         self.currentUser = currentUser
         super.init(nibName: nil, bundle: nil)
@@ -39,13 +49,24 @@ class SetupProfileViewController: UIViewController {
         
         view.backgroundColor = .white
         
+        fullImageView.delegate = self
+        
         setupConstraints()
         goToChatsButton.addTarget(self, action: #selector(goToChatsButtonTapped), for: .touchUpInside)
     }
     
     @objc func goToChatsButtonTapped() {
         
-        FirestoreService.shared.saveProfileWith(id: currentUser.uid, email: currentUser.email!, username: fullNameTextField.text, avatarImageString: nil, description: aboutMeTextField.text!, sex: sexSegmentedControl.titleForSegment(at: sexSegmentedControl.selectedSegmentIndex)) { (result) in
+        let avatarBase64 = StorageService.shared.uploadPhoto(selectedImage)
+            
+            FirestoreService.shared.saveProfileWith(
+                id: currentUser.uid,
+                email: currentUser.email ?? "",
+                username: fullNameTextField.text ?? "",
+                avatarImage: selectedImage,  
+                description: aboutMeTextField.text,
+                sex: sexSegmentedControl.titleForSegment(at: sexSegmentedControl.selectedSegmentIndex)
+            ) { (result) in
             switch result {
             case .success(let mUser):
                 self.showAlert(with: "Successful!", end: "Have a nice chatting", completion: {
@@ -105,6 +126,25 @@ extension SetupProfileViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
+    }
+}
+
+// MARK: - ImagePicker Delegate
+extension SetupProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        dismiss(animated: true)
+        
+        if let image = info[.editedImage] as? UIImage {
+            selectedImage = image
+            fullImageView.circleImageView.image = image
+        }
+    }
+}
+
+// MARK: - AddPhotoView Delegate
+extension SetupProfileViewController: AddPhotoViewDelegate {
+    func pickPhotoTapped() {
+        presentImagePicker()
     }
 }
 

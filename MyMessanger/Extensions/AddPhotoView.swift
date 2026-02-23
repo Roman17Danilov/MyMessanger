@@ -7,7 +7,13 @@
 
 import UIKit
 
+protocol AddPhotoViewDelegate: AnyObject {
+    func pickPhotoTapped()
+}
+
 class AddPhotoView: UIView {
+    
+    weak var delegate: AddPhotoViewDelegate?
     
     var circleImageView: UIImageView = {
        let imageView = UIImageView()
@@ -40,6 +46,8 @@ class AddPhotoView: UIView {
         addSubview(circleImageView)
         addSubview(plusButton)
         
+        plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
+        
         setupConstraints()
     }
     
@@ -71,6 +79,10 @@ class AddPhotoView: UIView {
         
         circleImageView.layer.masksToBounds = true
         circleImageView.layer.cornerRadius = circleImageView.frame.width / 2
+    }
+    
+    @objc private func plusButtonTapped() {
+        delegate?.pickPhotoTapped()
     }
 }
 
