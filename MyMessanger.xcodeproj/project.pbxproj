@@ -18,6 +18,8 @@
 		30BE9BAE2F48FBBC00CB484E /* FirebaseAnalyticsIdentitySupport in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9BAD2F48FBBC00CB484E /* FirebaseAnalyticsIdentitySupport */; };
 		30BE9C692F499BA100CB484E /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9C682F499BA100CB484E /* FirebaseAuth */; };
 		30BE9C6B2F499BB600CB484E /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 30BE9C6A2F499BB600CB484E /* FirebaseCore */; };
+		30FABD892F4F788A00163C8B /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 30FABD882F4F788A00163C8B /* SDWebImage */; };
+		30FABD8B2F4F788A00163C8B /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 30FABD8A2F4F788A00163C8B /* SDWebImageMapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,10 +54,12 @@
 			files = (
 				30BE9BA82F48FBBB00CB484E /* FirebaseAILogic in Frameworks */,
 				30BE9C692F499BA100CB484E /* FirebaseAuth in Frameworks */,
+				30FABD8B2F4F788A00163C8B /* SDWebImageMapKit in Frameworks */,
 				30BE9BAE2F48FBBC00CB484E /* FirebaseAnalyticsIdentitySupport in Frameworks */,
 				30BE9BA62F48FBBB00CB484E /* FirebaseAI in Frameworks */,
 				30BE9C6B2F499BB600CB484E /* FirebaseCore in Frameworks */,
 				3032F9AD2F4B849500C9942D /* GoogleSignInSwift in Frameworks */,
+				30FABD892F4F788A00163C8B /* SDWebImage in Frameworks */,
 				3076F25F2F4ADDF900D0FA2F /* FirebaseFirestore in Frameworks */,
 				30BE9BAA2F48FBBB00CB484E /* FirebaseAnalytics in Frameworks */,
 				30ACBBAC2F4CDF5000CC6D2D /* FirebaseStorage in Frameworks */,
@@ -122,6 +126,8 @@
 				3032F9AA2F4B849500C9942D /* GoogleSignIn */,
 				3032F9AC2F4B849500C9942D /* GoogleSignInSwift */,
 				30ACBBAB2F4CDF5000CC6D2D /* FirebaseStorage */,
+				30FABD882F4F788A00163C8B /* SDWebImage */,
+				30FABD8A2F4F788A00163C8B /* SDWebImageMapKit */,
 			);
 			productName = MyMessanger;
 			productReference = 30BE9B272F48EAA200CB484E /* MyMessanger.app */;
@@ -154,6 +160,7 @@
 			packageReferences = (
 				30BE9BA42F48FBBB00CB484E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				3032F9A92F4B849500C9942D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				30FABD872F4F788A00163C8B /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 30BE9B282F48EAA200CB484E /* Products */;
@@ -413,6 +420,14 @@
 				minimumVersion = 12.9.0;
 			};
 		};
+		30FABD872F4F788A00163C8B /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.21.6;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -470,6 +485,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 30BE9BA42F48FBBB00CB484E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
+		};
+		30FABD882F4F788A00163C8B /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30FABD872F4F788A00163C8B /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+		30FABD8A2F4F788A00163C8B /* SDWebImageMapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30FABD872F4F788A00163C8B /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImageMapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
