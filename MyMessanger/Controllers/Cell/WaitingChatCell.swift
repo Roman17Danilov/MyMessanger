@@ -26,7 +26,9 @@ class WaitingChatCell: UICollectionViewCell, SelfConfiguringCell {
     func configure<U>(with value: U) where U : Hashable {
         guard let chat: MChat = value as? MChat else { return }
         
-//        friendImageView.image = UIImage(named: chat.userImageString)
+        if let data = Data(base64Encoded: chat.friendUserImageString) {
+            friendImageView.image = UIImage(data: data)
+        }
     }
     
     private func setupConstraints() {
