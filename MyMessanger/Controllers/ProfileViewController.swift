@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ProfileViewController: UIViewController {
     
@@ -15,6 +16,20 @@ class ProfileViewController: UIViewController {
     let aboutMeLabel = UILabel(text: "You have the opportunity to chat with the best man in the world!", font: .systemFont(ofSize: 16, weight: .light))
     let myTextField = InsertableTextField()
     
+    private let user: MUser
+    
+    init(user: MUser) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+        
+        self.nameLabel.text = user.username
+        self.aboutMeLabel.text = user.description
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -22,6 +37,19 @@ class ProfileViewController: UIViewController {
         
         constomizeElements()
         setupConstraints()
+        setupAvatarImage()
+    }
+    
+    private func setupAvatarImage() {
+        imageView.image = UIImage(named: "human2")
+        imageView.backgroundColor = .systemGray5
+        imageView.layer.cornerRadius = imageView.frame.width / 2
+        imageView.clipsToBounds = true
+        
+        if let data = Data(base64Encoded: user.avatarStringURL) {
+            imageView.image = UIImage(data: data)
+            imageView.backgroundColor = .clear
+        }
     }
     
     private func constomizeElements() {
@@ -43,6 +71,20 @@ class ProfileViewController: UIViewController {
     
     @objc private func sendMessage() {
         print(#function)
+        
+        guard let message = myTextField.text, message != "" else { return }
+        
+        self.dismiss(animated: true) {
+            FirestoreService.shared.createWaitingChat(message: message, receiver: self.user) { result in
+                switch result {
+                case .success():
+                    UIApplication.topViewController?.showAlert(with: "Success!", end: "Your message for \(self.user.username) were sent!")
+                case .failure(let error):
+                    UIApplication.topViewController?.showAlert(with: "Error", end: error.localizedDescription)
+                }
+            }
+            
+        }
     }
     
 }
@@ -92,25 +134,60 @@ extension ProfileViewController {
     }
 }
 
-// MARK: - SwiftUI
-import SwiftUI
-
-struct ProfileVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
+extension UIApplication {
+    static var keyWindow: UIWindow? {
+        let scenes = shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .filter { $0.activationState == .foregroundActive }
+        
+        return scenes.first?
+            .windows
+            .filter { $0.isKeyWindow }
+            .first
     }
     
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let profileVC = ProfileViewController()
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<ProfileVCProvider.ContainerView>) -> ProfileViewController {
-            return profileVC
-        }
-        
-        func updateUIViewController(_ uiViewController: ProfileVCProvider.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<ProfileVCProvider.ContainerView>) {
-            
-        }
+    static var topViewController: UIViewController? {
+        keyWindow?
+            .rootViewController?
+            .findTopViewController()
     }
 }
+
+extension UIViewController {
+    func findTopViewController() -> UIViewController {
+        if let navController = self as? UINavigationController {
+            return navController.topViewController?.findTopViewController() ?? self
+        }
+        if let tabController = self as? UITabBarController {
+            return tabController.selectedViewController?.findTopViewController() ?? self
+        }
+        if let presented = presentedViewController {
+            return presented.findTopViewController()
+        }
+        return self
+    }
+}
+
+
+//// MARK: - SwiftUI
+//import SwiftUI
+//
+//struct ProfileVCProvider: PreviewProvider {
+//    static var previews: some View {
+//        ContainerView().edgesIgnoringSafeArea(.all)
+//    }
+//    
+//    struct ContainerView: UIViewControllerRepresentable {
+//        
+//        let profileVC = ProfileViewController(user: )
+//        
+//        func makeUIViewController(context: UIViewControllerRepresentableContext<ProfileVCProvider.ContainerView>) -> ProfileViewController {
+//            return profileVC
+//        }
+//        
+//        func updateUIViewController(_ uiViewController: ProfileVCProvider.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<ProfileVCProvider.ContainerView>) {
+//            
+//        }
+//    }
+//}
 
