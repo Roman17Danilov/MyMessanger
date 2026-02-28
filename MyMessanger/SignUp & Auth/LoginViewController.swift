@@ -29,6 +29,7 @@ class LoginViewController: UIViewController {
         
         return button
     }()
+    
     weak var delegate: AuthNavigatingDelegate?
     
     override func viewDidLoad() {
