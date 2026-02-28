@@ -16,6 +16,8 @@ class ListViewController: UIViewController {
     /*Bundle.main.decode([MChat].self, from: "waitingChats.json")*/
     private var waitingChatsListener: ListenerRegistration?
     
+    private var activeChatsListener: ListenerRegistration?
+    
     enum Section: Int, CaseIterable {
         case  waitingChats, activeChats
         
@@ -47,6 +49,7 @@ class ListViewController: UIViewController {
     
     deinit {
         waitingChatsListener?.remove()
+        activeChatsListener?.remove()
     }
     
     override func viewDidLoad() {
@@ -66,6 +69,16 @@ class ListViewController: UIViewController {
                     self.present(chatRequestVC, animated: true)
                 }
                 self.waitingChats = chats
+                self.reloadData()
+            case .failure(let error):
+                self.showAlert(with: "Error", end: error.localizedDescription)
+            }
+        })
+        
+        activeChatsListener = ListenerService.shared.activeChatsObserve(chats: activeChats, completion: { result in
+            switch result {
+            case .success(let chats):
+                self.activeChats = chats
                 self.reloadData()
             case .failure(let error):
                 self.showAlert(with: "Error", end: error.localizedDescription)
@@ -173,7 +186,14 @@ extension ListViewController: WaitingChatsNavigation {
     }
     
     func chatToActive(chat: MChat) {
-        print("1")
+        FirestoreService.shared.changeToActive(chat: chat) { result in
+            switch result {
+            case .success():
+                self.showAlert(with: "Success!", end: "Have nice chatting")
+            case .failure(let error):
+                self.showAlert(with: "Error!", end: error.localizedDescription)
+            }
+        }
     }
 }
 
@@ -263,27 +283,3 @@ extension ListViewController: UISearchBarDelegate {
         print(searchText)
     }
 }
-
-// MARK: - SwiftUI
-import SwiftUI
-
-struct ListVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let tabBarVC = MainTabBarController()
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<ListVCProvider.ContainerView>) -> MainTabBarController {
-            return tabBarVC
-        }
-        
-        func updateUIViewController(_ uiViewController: ListVCProvider.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<ListVCProvider.ContainerView>) {
-            
-        }
-    }
-}
-
-

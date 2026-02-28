@@ -30,9 +30,13 @@ class ActiveChatCell: UICollectionViewCell, SelfConfiguringCell {
     func configure<U>(with value: U) where U : Hashable {
         guard let chat: MChat = value as? MChat else { return }
         
-//        friendImageView.image = UIImage(named: chat.userImageString)
-//        friendName.text = chat.username
-//        lastMessage.text = chat.lastMessage
+        friendName.text = chat.friendUsername
+        lastMessage.text = chat.lastMessage
+        
+        if let data = Data(base64Encoded: chat.friendUserImageString) {
+            friendImageView.image = UIImage(data: data)
+        }
+        
     }
     
     required init?(coder: NSCoder) {
