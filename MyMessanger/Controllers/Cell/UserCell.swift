@@ -91,25 +91,3 @@ class UserCell: UICollectionViewCell, SelfConfiguringCell {
     
 }
 
-// MARK: - SwiftUI
-import SwiftUI
-
-struct UserChatProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let tabBarVC = MainTabBarController()
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<UserChatProvider.ContainerView>) -> MainTabBarController {
-            return tabBarVC
-        }
-        
-        func updateUIViewController(_ uiViewController: UserChatProvider.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<UserChatProvider.ContainerView>) {
-            
-        }
-    }
-}
-

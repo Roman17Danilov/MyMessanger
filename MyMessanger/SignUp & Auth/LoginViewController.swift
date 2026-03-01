@@ -7,6 +7,8 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseCore
+import GoogleSignIn
 
 class LoginViewController: UIViewController {
     
@@ -170,27 +172,5 @@ extension LoginViewController {
     }
 }
 
-// MARK: - SwiftUI
-import SwiftUI
-import FirebaseCore
-import GoogleSignIn
 
-struct LoginVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let loginVC = LoginViewController()
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<LoginVCProvider.ContainerView>) -> LoginViewController {
-            return loginVC
-        }
-        
-        func updateUIViewController(_ uiViewController: LoginVCProvider.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<LoginVCProvider.ContainerView>) {
-            
-        }
-    }
-}
 

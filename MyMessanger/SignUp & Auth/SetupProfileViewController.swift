@@ -159,25 +159,4 @@ extension SetupProfileViewController: AddPhotoViewDelegate {
     }
 }
 
-// MARK: - SwiftUI
-import SwiftUI
-
-struct SetupProfileVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let setupProfileVC = SetupProfileViewController(currentUser: Auth.auth().currentUser!)
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<SetupProfileVCProvider.ContainerView>) -> SetupProfileViewController {
-            return setupProfileVC
-        }
-        
-        func updateUIViewController(_ uiViewController: SetupProfileVCProvider.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<SetupProfileVCProvider.ContainerView>) {
-            
-        }
-    }
-}
 

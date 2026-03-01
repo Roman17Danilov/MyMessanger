@@ -169,25 +169,5 @@ extension UIViewController {
 }
 
 
-//// MARK: - SwiftUI
-//import SwiftUI
-//
-//struct ProfileVCProvider: PreviewProvider {
-//    static var previews: some View {
-//        ContainerView().edgesIgnoringSafeArea(.all)
-//    }
-//    
-//    struct ContainerView: UIViewControllerRepresentable {
-//        
-//        let profileVC = ProfileViewController(user: )
-//        
-//        func makeUIViewController(context: UIViewControllerRepresentableContext<ProfileVCProvider.ContainerView>) -> ProfileViewController {
-//            return profileVC
-//        }
-//        
-//        func updateUIViewController(_ uiViewController: ProfileVCProvider.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<ProfileVCProvider.ContainerView>) {
-//            
-//        }
-//    }
-//}
+
 

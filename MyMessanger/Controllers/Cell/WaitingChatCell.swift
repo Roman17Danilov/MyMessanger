@@ -49,25 +49,3 @@ class WaitingChatCell: UICollectionViewCell, SelfConfiguringCell {
     }
 }
 
-// MARK: - SwiftUI
-import SwiftUI
-
-struct WaitingChatProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let tabBarVC = MainTabBarController()
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<WaitingChatProvider.ContainerView>) -> MainTabBarController {
-            return tabBarVC
-        }
-        
-        func updateUIViewController(_ uiViewController: WaitingChatProvider.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<WaitingChatProvider.ContainerView>) {
-            
-        }
-    }
-}
-

@@ -61,8 +61,18 @@ class ChatsViewController: MessagesViewController {
         messages.append(message)
         messages.sort()
         
+        let isLastMessage = messages.firstIndex(of: message) == (messages.count - 1)
+        let shouldScrollToBottom = messagesCollectionView.isAtBottom && isLastMessage
+        
         messagesCollectionView.reloadData()
+        
+        if shouldScrollToBottom {
+            DispatchQueue.main.async {
+                self.messagesCollectionView.scrollToLastItem(animated: true)
+            }
+        }
     }
+    
 }
     
 extension ChatsViewController {
@@ -127,7 +137,19 @@ extension ChatsViewController: MessagesDataSource {
     func numberOfSections(in messagesCollectionView: MessageKit.MessagesCollectionView) -> Int {
         return 1
     }
-
+    
+    func cellTopLabelAttributedText(for message: any MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        if indexPath.item % 4 == 0 {
+            return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10),
+                NSAttributedString.Key.foregroundColor: UIColor.darkGray
+            ])
+        } else {
+            return nil
+        }
+    }
+    
+    
 }
 
 extension ChatsViewController: MessagesLayoutDelegate {
@@ -139,6 +161,14 @@ extension ChatsViewController: MessagesLayoutDelegate {
 extension ChatsViewController: MessagesDisplayDelegate {
     func backgroundColor(for message: any MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
         return isFromCurrentSender(message: message) ? .white : #colorLiteral(red: 0.8391960263, green: 0.5446689129, blue: 1, alpha: 1)
+    }
+    
+    func cellTopLabelHeight(for message: any MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        if indexPath.item % 4 == 0 {
+            return 30
+        } else {
+            return 0
+        }
     }
     
     func textColor(for message: any MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
@@ -171,6 +201,22 @@ extension ChatsViewController: InputBarAccessoryViewDelegate {
             }
         }
         inputBar.inputTextView.text = ""
+    }
+}
+
+extension UIScrollView {
+    
+    var isAtBottom: Bool {
+        return contentOffset.y >= verticalOffsetForBottom
+    }
+    
+    var verticalOffsetForBottom: CGFloat {
+        let scrollViewHeight = bounds.height
+        let scrollContentSizeHeight = contentSize.height
+        let bottomInset = contentInset.bottom
+        let scrollViewBottomOffset = scrollContentSizeHeight + bottomInset - scrollViewHeight
+        
+        return scrollViewBottomOffset
     }
 }
 

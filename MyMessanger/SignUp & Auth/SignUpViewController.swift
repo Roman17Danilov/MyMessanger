@@ -114,28 +114,6 @@ extension SignUpViewController {
     }
 }
 
-// MARK: - SwiftUI
-import SwiftUI
-
-struct SignUpVCProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-        
-        let signUpVC = SignUpViewController()
-        
-        func makeUIViewController(context: UIViewControllerRepresentableContext<SignUpVCProvider.ContainerView>) -> SignUpViewController {
-            return signUpVC
-        }
-        
-        func updateUIViewController(_ uiViewController: SignUpVCProvider.ContainerView.UIViewControllerType, context: UIViewControllerRepresentableContext<SignUpVCProvider.ContainerView>) {
-            
-        }
-    }
-}
-
 extension UIViewController {
     
     func showAlert(with title: String, end message: String, completion: @escaping () -> Void = { }) {
