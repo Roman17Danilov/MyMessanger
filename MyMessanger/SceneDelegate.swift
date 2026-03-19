@@ -15,43 +15,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
-            
-        if #available(iOS 26.0, *) {
-            window = UIWindow(windowScene: windowScene)
-        } else {
-            window = UIWindow(frame: windowScene.coordinateSpace.bounds)
-            window?.windowScene = windowScene
-        }
-            
-        if let user = Auth.auth().currentUser {
-            FirestoreService.shared.getUserData(user: user) { (result) in
-                switch result {
-                case .success(let mUser):
-                    let mainTabBar = MainTabBarController(currentUser: mUser)
-                    
-                    mainTabBar.modalPresentationStyle = .fullScreen
-                    self.window?.rootViewController = mainTabBar
-                case .failure(let error):
-                    self.window?.rootViewController = AuthViewController()
-                }
-            }
-        } else {
-            window?.rootViewController = AuthViewController()
-        }
         
-        window?.makeKeyAndVisible()
+        let window = UIWindow(windowScene: windowScene)
+        AppRouter.architecture = .mvvm  // ← MVVM
+        let authVC = AppRouter.authScreen()
+        window.rootViewController = UINavigationController(rootViewController: authVC)
+        self.window = window
+        window.makeKeyAndVisible()
     }
-    
+
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let url = URLContexts.first?.url else { return }
         
-        let signInResult = GIDSignIn.sharedInstance.handle(url)
+        _ = GIDSignIn.sharedInstance.handle(url)
     }
-
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

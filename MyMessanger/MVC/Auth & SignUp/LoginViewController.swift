@@ -85,30 +85,26 @@ class LoginViewController: UIViewController {
 
     
     @objc private func loginButtonTapped() {
-        print(#function)
-        
-        AuthService.shared.login(email: emailTextField.text!, password: passwordTextField.text!) { (result) in
+        AuthService.shared.login(email: emailTextField.text!, password: passwordTextField.text!) { [weak self] result in
             switch result {
-            case .success(let user):
-                self.showAlert(with: "Success", end: "You have been authorised") {
-                    FirestoreService.shared.getUserData(user: user) { (result) in
-                        switch result {
-                        case .success(let mUser):
-                            let mainTabBar = MainTabBarController(currentUser: mUser)
-                            mainTabBar.modalPresentationStyle = .fullScreen
-                            
-                            self.present(mainTabBar, animated: true, completion: nil)
-                        case .failure(let error):
-                            self.present(SetupProfileViewController(currentUser: user), animated: true)
-                        }
+            case .success(let firebaseUser):
+                FirestoreService.shared.getUserData(user: firebaseUser) { result in
+                    switch result {
+                    case .success(let mUser):
+                        let mainTabBar = MainTabBarController(currentUser: mUser)
+                        mainTabBar.modalPresentationStyle = .fullScreen
+                        self?.present(mainTabBar, animated: true)
+                    case .failure:
+                        let newMUser = MUser.from(firebaseUser: firebaseUser)
+                        self?.present(SetupProfileViewController(currentUser: newMUser), animated: true)
                     }
                 }
-                print(user.email!)
             case .failure(let error):
-                self.showAlert(with: "Error", end: error.localizedDescription)
+                self?.showAlert(with: "Error", end: error.localizedDescription)
             }
         }
     }
+
     
     @objc private func signUpButtonTapped() {
         dismiss(animated: true) {

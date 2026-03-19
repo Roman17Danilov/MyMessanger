@@ -66,19 +66,20 @@ class AuthViewController: UIViewController {
             
             switch result {
             case .success(let mUser):
-                self.showAlert(with: "Successful", end: "You have been registered") {
+                self.showAlert(with: "Success", end: "Welcome back!") {
                     let mainTabBar = MainTabBarController(currentUser: mUser)
-                    
                     mainTabBar.modalPresentationStyle = .fullScreen
                     self.present(mainTabBar, animated: true)
                 }
             case .failure:
-                self.showAlert(with: "Successful", end: "You have been registered") {
-                    self.present(SetupProfileViewController(currentUser: firebaseUser), animated: true)
+                self.showAlert(with: "Success", end: "Set up your profile!") {
+                    let newMUser = MUser.from(firebaseUser: firebaseUser)
+                    self.present(SetupProfileViewController(currentUser: newMUser), animated: true)
                 }
             }
         }
     }
+
 
 
     

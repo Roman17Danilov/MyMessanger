@@ -20,7 +20,7 @@ class SetupProfileViewController: UIViewController {
     let aboutMeTextField = OneLineTextField(font: .avenir20())
     let sexSegmentedControl = UISegmentedControl(first: "Male", second: "Female")
     let goToChatsButton = UIButton(title: "Go to chats!", titleColor: .white, backgroundColor: .buttonDark(), cornerRadius: 4)
-    private let currentUser: User
+    private let currentUser: MUser
     
     private var selectedImage: UIImage?
     
@@ -32,24 +32,21 @@ class SetupProfileViewController: UIViewController {
         present(picker, animated: true)
     }
     
-    init(currentUser: User) {
+    init(currentUser: MUser) {
         self.currentUser = currentUser
         super.init(nibName: nil, bundle: nil)
         
-        if let username = currentUser.displayName {
-            fullNameTextField.text = username
-        }
+        fullNameTextField.text = currentUser.username
         
-        if let photoURL = currentUser.photoURL {
-            let photoString = photoURL.absoluteString
-                
-            if let data = Data(base64Encoded: photoString) {
+        if !currentUser.avatarStringURL.isEmpty {
+            if let data = Data(base64Encoded: currentUser.avatarStringURL) {
                 fullImageView.circleImageView.image = UIImage(data: data)
-            } else {
-                fullImageView.circleImageView.sd_setImage(with: photoURL)
+            } else if let url = URL(string: currentUser.avatarStringURL) {
+                fullImageView.circleImageView.sd_setImage(with: url)
             }
         }
     }
+
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -68,11 +65,11 @@ class SetupProfileViewController: UIViewController {
     
     @objc func goToChatsButtonTapped() {
         
-        let avatarBase64 = StorageService.shared.uploadPhoto(selectedImage)
+        _ = StorageService.shared.uploadPhoto(selectedImage)
             
             FirestoreService.shared.saveProfileWith(
-                id: currentUser.uid,
-                email: currentUser.email ?? "",
+                id: currentUser.id,
+                email: currentUser.email,
                 username: fullNameTextField.text ?? "",
                 avatarImage: selectedImage,  
                 description: aboutMeTextField.text,

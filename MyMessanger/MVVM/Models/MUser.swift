@@ -7,6 +7,8 @@
 
 import UIKit
 import FirebaseFirestore
+import Firebase
+import FirebaseAuth
 
 struct MUser: Hashable, Decodable {
     var username: String
@@ -87,5 +89,18 @@ struct MUser: Hashable, Decodable {
         let lowercasedFilter = filter.lowercased()
         
         return username.lowercased().contains(lowercasedFilter)
+    }
+}
+
+extension MUser {
+    static func from(firebaseUser: FirebaseAuth.User) -> MUser {
+        MUser(
+            username: firebaseUser.displayName ?? "No name",
+            email: firebaseUser.email ?? "No email",
+            avatarStringURL: firebaseUser.photoURL?.absoluteString ?? "",
+            description: "",
+            sex: "male",
+            id: firebaseUser.uid
+        )
     }
 }
