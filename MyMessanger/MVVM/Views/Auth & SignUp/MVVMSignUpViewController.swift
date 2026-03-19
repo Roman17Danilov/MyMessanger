@@ -1,15 +1,14 @@
 //
-//  SignUpViewController.swift
+//  MVVMSignUpViewController.swift
 //  MyMessanger
 //
-//  Created by Roman on 20.02.2026.
+//  Created by Roman on 18.03.2026.
 //
 
 import UIKit
 import FirebaseAuth
 
-class SignUpViewController: UIViewController {
-    
+class MVVMSignUpViewController: UIViewController {
     let welcomeLabel = UILabel(text: "Good to see you!", font: .avenir26())
     let emailLabel = UILabel(text: "Email")
     let passwordLabel = UILabel(text: "Password")
@@ -21,13 +20,13 @@ class SignUpViewController: UIViewController {
     let signUpButton = UIButton(title: "Sign Up", titleColor: .white, backgroundColor: .buttonDark(), cornerRadius: 4)
     let loginButton: UIButton = {
         let button = UIButton(type: .system)
-        
         button.setTitle("Login", for: .normal)
         button.setTitleColor(.buttonRed(), for: .normal)
         button.titleLabel?.font = .avenir20()
-        
         return button
     }()
+    
+    private let viewModel = SignUpViewModel()
     weak var delegate: AuthNavigatingDelegate?
     
     override func viewDidLoad() {
@@ -36,24 +35,67 @@ class SignUpViewController: UIViewController {
         view.backgroundColor = .white
         
         setupConstraints()
+        setupBindings()
+        setupTextFieldValidation()
         
         signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
     }
     
-    @objc private func signUpButtonTapped() {
-        print(#function)
-        
-        AuthService.shared.register(email: emailTextField.text, password: passwordTextField.text, confirmPassword: confirmPasswordTextField.text) { (result) in
-            switch result {
-            case .success(let user):
-                self.showAlert(with: "Success", end: "You have been registered") {
-                    self.present(SetupProfileViewController(currentUser: user), animated: true)
-                }
-            case .failure(let error):
-                self.showAlert(with: "Error", end: error.localizedDescription)
+    private func setupBindings() {
+        viewModel.updateButtonState = { [weak self] in
+            DispatchQueue.main.async {
+                self?.updateSignUpButton()
             }
         }
+        viewModel.showError = { [weak self] message in
+            DispatchQueue.main.async {
+                self?.showAlert(with: "Error", end: message ?? "Unknown error")
+            }
+        }
+        viewModel.signUpComplete = { [weak self] firebaseUser in
+            DispatchQueue.main.async {
+                let newMUser = MUser.from(firebaseUser: firebaseUser)
+                self?.present(SetupProfileViewController(currentUser: newMUser), animated: true)
+            }
+        }
+    }
+
+
+    
+    private func setupTextFieldValidation() {
+        emailTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        passwordTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        confirmPasswordTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+    }
+    
+    @objc private func textFieldChanged() {
+        readTextFields()
+        updateSignUpButton()
+    }
+    
+    @objc private func signUpButtonTapped() {
+        viewModel.clearError()
+        readTextFields()
+        viewModel.signUp()
+    }
+    
+    private func readTextFields() {
+        viewModel.email = emailTextField.text ?? ""
+        viewModel.password = passwordTextField.text ?? ""
+        viewModel.confirmPassword = confirmPasswordTextField.text ?? ""
+        viewModel.fullName = emailTextField.text ?? ""
+    }
+    
+    private func updateSignUpButton() {
+        let isValid = viewModel.isFormValid && !viewModel.isLoading
+        signUpButton.isEnabled = isValid
+        signUpButton.alpha = viewModel.isLoading ? 0.6 : 1.0
+        
+        signUpButton.setTitle(
+            viewModel.isLoading ? "Signing up..." : "Sign Up",
+            for: .normal
+        )
     }
     
     @objc private func loginButtonTapped() {
@@ -63,8 +105,7 @@ class SignUpViewController: UIViewController {
     }
 }
 
-// MARK: - Setup constraints
-extension SignUpViewController {
+extension MVVMSignUpViewController {
     private func setupConstraints() {
         let emailStackView = UIStackView(arrangedSubviews: [emailLabel, emailTextField], axis: .vertical, spacing: 0)
         let passwordStackView = UIStackView(arrangedSubviews: [passwordLabel, passwordTextField], axis: .vertical, spacing: 0)
@@ -76,14 +117,14 @@ extension SignUpViewController {
             passwordStackView,
             confirmPasswordStackView,
             signUpButton
-            ], axis: .vertical, spacing: 40)
+        ], axis: .vertical, spacing: 40)
         
         loginButton.contentHorizontalAlignment = .leading
         
         let bottomStackView = UIStackView(arrangedSubviews: [
             alreadyOnboardLabel,
             loginButton
-            ], axis: .horizontal, spacing: 10)
+        ], axis: .horizontal, spacing: 10)
         
         bottomStackView.alignment = .firstBaseline
         
@@ -113,19 +154,3 @@ extension SignUpViewController {
         ])
     }
 }
-
-extension UIViewController {
-    
-    func showAlert(with title: String, end message: String, completion: @escaping () -> Void = { }) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let ok = UIAlertAction(title: "OK", style: .default) {
-            (_) in
-            completion()
-        }
-        
-        alertController.addAction(ok)
-        
-        present(alertController, animated: true)
-    }
-}
-

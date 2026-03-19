@@ -22,7 +22,7 @@ class Validators {
     static func isFilled(username: String?, description: String?, sex: String?) -> Bool {
         guard let description = description,
               let sex = sex,
-              let username = username,
+              let _ = username,
               description != "",
               sex != "",
               description != "" else { return false }
